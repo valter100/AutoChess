@@ -18,6 +18,10 @@ void AUnit::BeginPlay()
 	
 }
 
+void AUnit::Die()
+{
+}
+
 // Called every frame
 void AUnit::Tick(float DeltaTime)
 {

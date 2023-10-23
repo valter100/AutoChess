@@ -25,3 +25,8 @@ void APlacementNode::Tick(float DeltaTime)
 
 }
 
+void APlacementNode::SetOccupied(bool state)
+{
+	Occupied = state;
+}
+

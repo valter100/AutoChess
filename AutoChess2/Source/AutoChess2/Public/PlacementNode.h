@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Unit.h"
 #include "GameFramework/Actor.h"
 #include "PlacementNode.generated.h"
 
@@ -13,7 +12,7 @@ class AUTOCHESS2_API APlacementNode : public AActor
 	GENERATED_BODY()
 	
 public:	
-	TSharedPtr<AUnit> currentUnit;
+	bool Occupied;
 
 	// Sets default values for this actor's properties
 	APlacementNode();
@@ -25,5 +24,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void SetOccupied(bool state);
 
 };
