@@ -25,3 +25,15 @@ void AUnitShop::Tick(float DeltaTime)
 
 }
 
+void AUnitShop::SpawnUnit(int UnitIndex)
+{
+	Addon::Print("Unit Spawned: " + AvailableUnits[UnitIndex]->GetName());
+
+	UClass* selectedClass = AvailableUnits[UnitIndex];
+
+	FTransform spawnTransform;
+	spawnTransform.SetLocation(FVector(0, 0, 0));
+
+	AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(selectedClass, spawnTransform);
+}
+

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Unit.h"
+#include "Addon.h"
 #include "GameFramework/Actor.h"
 #include "UnitShop.generated.h"
 
@@ -13,7 +14,8 @@ class AUTOCHESS2_API AUnitShop : public AActor
 	GENERATED_BODY()
 	
 public:	
-	TArray <TSharedPtr<AUnit>> AvailableUnits;
+	UPROPERTY(EditAnywhere)
+	TArray<UClass*> AvailableUnits;
 
 	// Sets default values for this actor's properties
 	AUnitShop();
@@ -25,5 +27,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void SpawnUnit(int UnitIndex);
 };
