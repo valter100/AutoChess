@@ -43,5 +43,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void SetPickedUp(bool state);
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void TogglePickedUp();
+	virtual void MoveToMouse();
 };
