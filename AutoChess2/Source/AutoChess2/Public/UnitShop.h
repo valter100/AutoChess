@@ -14,8 +14,15 @@ class AUTOCHESS2_API AUnitShop : public AActor
 	GENERATED_BODY()
 	
 public:	
+
 	UPROPERTY(EditAnywhere)
-	TArray<UClass*> AvailableUnits;
+	int ShopSize = 6;
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<AUnit>> AllUnits;
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<AUnit>> AvailableUnits;	
+	UPROPERTY(EditAnywhere)
+	TArray<AUnit*> SpawnedUnits;
 
 	// Sets default values for this actor's properties
 	AUnitShop();
@@ -28,5 +35,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
-	void SpawnUnit(int UnitIndex);
+	void AddUnits();
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void RefreshUnits();
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void SpawnUnits();
+	UFUNCTION(BlueprintPure, category = "Unit Shop")
+	AUnit* GetUnitAtIndex(int UnitIndex);
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void BuyUnit(int UnitIndex);
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void ToggleShop();
 };

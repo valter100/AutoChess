@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "PlacementNode.h"
+#include "Addon.h"
+#include "Engine/Texture2D.h"
 #include "GameFramework/Actor.h"
 #include "Unit.generated.h"
 
@@ -19,6 +21,7 @@ public:
 	AUnit();
 
 protected:
+	UPROPERTY(EditAnywhere) UTexture2D* ImageTexture;
 	UPROPERTY(EditAnywhere) int Health;
 	UPROPERTY(EditAnywhere) int Mana;
 	UPROPERTY(EditAnywhere) FString Name;
@@ -27,8 +30,9 @@ protected:
 	UPROPERTY(EditAnywhere) float AttackRange;
 	UPROPERTY(EditAnywhere) float AttacksPerSecond;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unit") bool PickedUp;
-	TSharedPtr<APlacementNode> CurrentNode;
-	TSharedPtr<APlacementNode> LastNode;
+	UPROPERTY(EditAnywhere) APlacementNode* HoveredNode;
+	UPROPERTY(EditAnywhere) APlacementNode* CurrentNode;
+	UPROPERTY(EditAnywhere) APlacementNode* LastNode;
 	bool IsDead;
 	float TimeSinceLastAttack;
 	//UPROPERTY(VisibleAnywhere, Category = "Unit")
@@ -48,4 +52,10 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Unit")
 	virtual void TogglePickedUp();
 	virtual void MoveToMouse();
+	virtual void Place();
+	virtual void Lift();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual FText statData();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual UTexture2D* GetImageTex();
 };

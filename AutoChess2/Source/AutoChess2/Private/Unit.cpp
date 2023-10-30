@@ -8,7 +8,6 @@ AUnit::AUnit()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +42,15 @@ void AUnit::SetPickedUp(bool state)
 void AUnit::TogglePickedUp()
 {
 	PickedUp = !PickedUp;
+
+	if (!PickedUp)
+	{
+		Place();
+	}
+	else
+	{
+		Lift();
+	}
 }
 
 void AUnit::MoveToMouse()
@@ -63,10 +71,41 @@ void AUnit::MoveToMouse()
 		{
 			SetActorLocation(HitResult.ImpactPoint);
 		}
-		//else if (HitResult.GetActor()->ActorHasTag("Node"))
-		//{
-		//	SetActorLocation(HitResult.GetActor()->GetActorLocation());
-		//}
+
+		else if (HitResult.GetActor()->ActorHasTag("Node"))
+		{
+			SetActorLocation(HitResult.GetActor()->GetActorLocation());
+			HoveredNode = Cast<APlacementNode>(HitResult.GetActor());
+		}
 	}
+}
+
+void AUnit::Place()
+{
+	if (HoveredNode)
+	{
+		CurrentNode = HoveredNode;
+		HoveredNode = nullptr;
+	}
+}
+
+void AUnit::Lift()
+{
+	if (CurrentNode)
+	{
+		LastNode = CurrentNode;
+		CurrentNode = nullptr;
+	}
+}
+
+FText AUnit::statData()
+{
+	return FText::FromString("Name: " + Name + "\n" + "Health: ");/* + Health*//* + "\n" +
+		"Damage: " Damage;*/
+}
+
+UTexture2D* AUnit::GetImageTex()
+{
+	return ImageTexture;
 }
 
