@@ -100,7 +100,10 @@ void AUnit::Lift()
 
 FText AUnit::statData()
 {
-	return FText::FromString("Name: " + Name + "\n" + "Health: ");/* + Health*//* + "\n" +
+	return FText::FromString("Name: " + Name + "\n" + 
+		"Health: " + FString::FromInt(Health) + "\n" +
+	"Damage: " + FString::FromInt(Damage) + "\n" +
+	"Attack Speed: " + FString::SanitizeFloat(AttacksPerSecond));/* + Health*//* + "\n" +
 		"Damage: " Damage;*/
 }
 
