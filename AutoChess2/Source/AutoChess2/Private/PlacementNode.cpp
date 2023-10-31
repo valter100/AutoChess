@@ -30,3 +30,8 @@ void APlacementNode::SetOccupied(bool state)
 	Occupied = state;
 }
 
+bool APlacementNode::GetOccupied()
+{
+	return Occupied;
+}
+

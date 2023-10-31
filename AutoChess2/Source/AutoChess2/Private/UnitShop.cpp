@@ -100,7 +100,11 @@ void AUnitShop::BuyUnit(int UnitIndex)
 	AvailableUnits[UnitIndex] = nullptr;
 
 	AUnit* SpawnedUnit = SpawnedUnits[UnitIndex];
-	SpawnedUnit->TogglePickedUp();
+
+	FVector position;
+	APlacementNode* SpawnNode = NodeManager->GetFirstUnoccupiedNode();
+	SpawnedUnit->SetCurrentNode(SpawnNode);
+	SpawnedUnit->SetActorLocation(SpawnNode->GetActorLocation());
 	SpawnedUnit->SetIsBought(true);
 }
 

@@ -70,6 +70,7 @@ void AUnit::MoveToMouse()
 		if (HitResult.GetActor()->ActorHasTag("Ground"))
 		{
 			SetActorLocation(HitResult.ImpactPoint);
+			HoveredNode = nullptr;
 		}
 
 		else if (HitResult.GetActor()->ActorHasTag("Node"))
@@ -85,7 +86,13 @@ void AUnit::Place()
 	if (HoveredNode)
 	{
 		CurrentNode = HoveredNode;
+		CurrentNode->SetOccupied(true);
 		HoveredNode = nullptr;
+	}
+	else
+	{
+		CurrentNode = LastNode;
+		SetActorLocation(CurrentNode->GetActorLocation());
 	}
 }
 
@@ -94,6 +101,7 @@ void AUnit::Lift()
 	if (CurrentNode)
 	{
 		LastNode = CurrentNode;
+		CurrentNode->SetOccupied(false);
 		CurrentNode = nullptr;
 	}
 }
@@ -120,5 +128,11 @@ bool AUnit::GetIsBought()
 void AUnit::SetIsBought(bool State)
 {
 	IsBought = State;
+}
+
+void AUnit::SetCurrentNode(APlacementNode* NewNode)
+{
+	CurrentNode = NewNode;
+	CurrentNode->SetOccupied(true);
 }
 

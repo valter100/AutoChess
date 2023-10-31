@@ -61,4 +61,6 @@ public:
 	virtual UTexture2D* GetImageTex();
 	virtual bool GetIsBought();
 	virtual void SetIsBought(bool State);
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void SetCurrentNode(APlacementNode* NewNode);
 };

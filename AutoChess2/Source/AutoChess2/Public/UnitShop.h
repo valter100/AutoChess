@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Unit.h"
+#include "NodeManager.h"
 #include "Addon.h"
 #include "GameFramework/Actor.h"
 #include "UnitShop.generated.h"
@@ -23,6 +24,8 @@ public:
 	TArray<TSubclassOf<AUnit>> AvailableUnits;	
 	UPROPERTY(EditAnywhere)
 	TArray<AUnit*> SpawnedUnits;
+	UPROPERTY(EditAnywhere)
+		ANodeManager* NodeManager;
 
 	// Sets default values for this actor's properties
 	AUnitShop();

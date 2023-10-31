@@ -25,3 +25,16 @@ void ANodeManager::Tick(float DeltaTime)
 
 }
 
+APlacementNode* ANodeManager::GetFirstUnoccupiedNode()
+{
+	for (APlacementNode* Node : SideLineNodes)
+	{
+		if (!Node->GetOccupied())
+		{
+			return Node;
+		}
+	}
+
+	return nullptr;
+}
+

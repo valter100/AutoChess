@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NodeManager.h"
 #include "GameFramework/Actor.h"
 #include "UnitPlacer.generated.h"
 
