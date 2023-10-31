@@ -30,26 +30,58 @@ void AUnitShop::AddUnits()
 	{
 		int32 RandomIndex = FMath::RandRange(0, AllUnits.Num() - 1);
 		AvailableUnits.Add(AllUnits[RandomIndex]);
-
 	}
-		
-	SpawnUnits();
+
+	AddSpawnUnits();
 }
 
 void AUnitShop::RefreshUnits()
 {
+
 	for (int i = 0; i < ShopSize; i++)
 	{
-		if (SpawnedUnits[i] != nullptr)
-			SpawnedUnits[i]->Destroy();
-
 		int32 RandomIndex = FMath::RandRange(0, AllUnits.Num() - 1);
+
 		AvailableUnits[i] = AllUnits[RandomIndex];
+
+	}
+
+	for (AUnit* unit : SpawnedUnits)
+	{
+		if (!unit->GetIsBought())
+		{
+			unit->Destroy();
+		}
+		
+		SpawnedUnits.Remove(unit);
+	}
+
+	RefreshSpawnUnits();
+}
+
+void AUnitShop::AddSpawnUnits()
+{
+	for (UClass* i : AvailableUnits)
+	{
+		SpawnedUnits.Add(GetWorld()->SpawnActor<AUnit>(i));
+	}
+
+	FVector spawnPosition(-10000, 0, 0);
+
+	for (AUnit* i : SpawnedUnits)
+	{
+		i->SetActorLocation(spawnPosition);
 	}
 }
 
-void AUnitShop::SpawnUnits()
+void AUnitShop::RefreshSpawnUnits()
 {
+	for (int i = 0; i < SpawnedUnits.Num(); i++)
+	{
+		SpawnedUnits.RemoveAt(i);
+		i--;
+	}
+
 	for (UClass* i : AvailableUnits)
 	{
 		SpawnedUnits.Add(GetWorld()->SpawnActor<AUnit>(i));
@@ -65,9 +97,11 @@ void AUnitShop::SpawnUnits()
 
 void AUnitShop::BuyUnit(int UnitIndex)
 {
+	AvailableUnits[UnitIndex] = nullptr;
+
 	AUnit* SpawnedUnit = SpawnedUnits[UnitIndex];
 	SpawnedUnit->TogglePickedUp();
-	//SpawnedUnits.RemoveAt(UnitIndex);
+	SpawnedUnit->SetIsBought(true);
 }
 
 void AUnitShop::ToggleShop()

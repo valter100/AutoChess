@@ -33,6 +33,7 @@ protected:
 	UPROPERTY(EditAnywhere) APlacementNode* HoveredNode;
 	UPROPERTY(EditAnywhere) APlacementNode* CurrentNode;
 	UPROPERTY(EditAnywhere) APlacementNode* LastNode;
+	UPROPERTY(EditAnywhere) bool IsBought;
 	bool IsDead;
 	float TimeSinceLastAttack;
 	//UPROPERTY(VisibleAnywhere, Category = "Unit")
@@ -58,4 +59,6 @@ public:
 	virtual FText statData();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual UTexture2D* GetImageTex();
+	virtual bool GetIsBought();
+	virtual void SetIsBought(bool State);
 };

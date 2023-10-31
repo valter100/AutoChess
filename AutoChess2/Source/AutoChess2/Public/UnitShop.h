@@ -39,11 +39,13 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void RefreshUnits();
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
-	void SpawnUnits();
+	void AddSpawnUnits();	
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void RefreshSpawnUnits();
 	UFUNCTION(BlueprintPure, category = "Unit Shop")
 	AUnit* GetUnitAtIndex(int UnitIndex);
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void BuyUnit(int UnitIndex);
-	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	UFUNCTION(BlueprintCallable, category = "Unit Shop DEPRECATED")
 	void ToggleShop();
 };

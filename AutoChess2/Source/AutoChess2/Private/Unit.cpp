@@ -109,3 +109,13 @@ UTexture2D* AUnit::GetImageTex()
 	return ImageTexture;
 }
 
+bool AUnit::GetIsBought()
+{
+	return IsBought;
+}
+
+void AUnit::SetIsBought(bool State)
+{
+	IsBought = State;
+}
+

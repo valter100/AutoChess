@@ -31,7 +31,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UFUNCTION(BlueprintCallable, Category = "Round Manager")
+	UFUNCTION(BlueprintCallable, Category = "Round Manager DEPRECATED")
 	void ToggleShop();
 	void SetShop(AUnitShop* newShop);
 	UFUNCTION(BlueprintPure, Category = "Round Manager")
