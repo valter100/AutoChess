@@ -31,11 +31,6 @@ void ARoundManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ARoundManager::ToggleShop()
-{
-	Shop->ToggleShop();
-}
-
 void ARoundManager::SetShop(AUnitShop* newShop)
 {
 	Shop = newShop;
@@ -44,6 +39,11 @@ void ARoundManager::SetShop(AUnitShop* newShop)
 float ARoundManager::GetRoundTimer()
 {
 	return RoundTimer;
+}
+
+float ARoundManager::GetTimeLeft()
+{
+	return TimeBetweenRounds - RoundTimer;
 }
 
 void ARoundManager::SetRoundTimer(float value)

@@ -35,3 +35,8 @@ bool APlacementNode::GetOccupied()
 	return Occupied;
 }
 
+//void APlacementNode::SellUnit(AUnit* SellUnit)
+//{
+//	Shop->SellUnit(SellUnit);
+//}
+

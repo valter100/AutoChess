@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Unit.h"
 #include "NodeManager.h"
+#include <MyPlayer.h>
 #include "Addon.h"
 #include "GameFramework/Actor.h"
 #include "UnitShop.generated.h"
@@ -17,7 +18,10 @@ class AUTOCHESS2_API AUnitShop : public AActor
 public:	
 
 	UPROPERTY(EditAnywhere)
-	int ShopSize = 6;
+	int ShopSize = 6;	
+	UPROPERTY(EditAnywhere)
+	int StartCurrency;
+	int Currency = 0;
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AUnit>> AllUnits;
 	UPROPERTY(EditAnywhere)
@@ -25,7 +29,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<AUnit*> SpawnedUnits;
 	UPROPERTY(EditAnywhere)
-		ANodeManager* NodeManager;
+	ANodeManager* NodeManager;
+	UPROPERTY(EditAnywhere)
+	AMyPlayer* Player;
 
 	// Sets default values for this actor's properties
 	AUnitShop();
@@ -38,6 +44,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+
 	void AddUnits();
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void RefreshUnits();
@@ -45,10 +52,20 @@ public:
 	void AddSpawnUnits();	
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void RefreshSpawnUnits();
+
 	UFUNCTION(BlueprintPure, category = "Unit Shop")
 	AUnit* GetUnitAtIndex(int UnitIndex);
+
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
-	void BuyUnit(int UnitIndex);
-	UFUNCTION(BlueprintCallable, category = "Unit Shop DEPRECATED")
-	void ToggleShop();
+	bool BuyUnit(int UnitIndex);
+
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void SetCurrency(int newAmount);	
+	UFUNCTION(BlueprintPure, category = "Unit Shop")
+	int GetCurrency();
+	UFUNCTION(BlueprintPure, category = "Unit Shop")
+	int GetStartCurrency();
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
+	void AddCurrency(int currencyAdded);
+	//void SellUnit(AUnit* SellUnit);
 };

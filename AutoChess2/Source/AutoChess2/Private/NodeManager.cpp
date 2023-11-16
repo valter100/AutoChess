@@ -38,3 +38,11 @@ APlacementNode* ANodeManager::GetFirstUnoccupiedNode()
 	return nullptr;
 }
 
+void ANodeManager::TogglePlacementNodes()
+{
+	for (APlacementNode* node : PlacementNodes)
+	{
+		node->SetActorHiddenInGame(!node->IsHidden());
+	}
+}
+

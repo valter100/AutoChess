@@ -71,6 +71,7 @@ void AUnitShop::AddSpawnUnits()
 	for (AUnit* i : SpawnedUnits)
 	{
 		i->SetActorLocation(spawnPosition);
+		i->SetCost(FMath::RandRange(0, 10)); //Change to depend on stat changes and rarity
 	}
 }
 
@@ -92,26 +93,56 @@ void AUnitShop::RefreshSpawnUnits()
 	for (AUnit* i : SpawnedUnits)
 	{
 		i->SetActorLocation(spawnPosition);
+		i->SetCost(FMath::RandRange(0, 10)); //Change to depend on stat changes and rarity
 	}
 }
 
-void AUnitShop::BuyUnit(int UnitIndex)
+bool AUnitShop::BuyUnit(int UnitIndex)
 {
-	AvailableUnits[UnitIndex] = nullptr;
+	APlacementNode* SpawnNode = NodeManager->GetFirstUnoccupiedNode();
+	if (SpawnNode == nullptr || SpawnedUnits[UnitIndex]->GetCost() > Currency)
+	{
+		return false;
+	}
 
+	AvailableUnits[UnitIndex] = nullptr;
 	AUnit* SpawnedUnit = SpawnedUnits[UnitIndex];
 
-	FVector position;
-	APlacementNode* SpawnNode = NodeManager->GetFirstUnoccupiedNode();
 	SpawnedUnit->SetCurrentNode(SpawnNode);
 	SpawnedUnit->SetActorLocation(SpawnNode->GetActorLocation());
 	SpawnedUnit->SetIsBought(true);
+
+	Currency -= SpawnedUnit->GetCost();
+	Player->AddUnitToOwnedUnits(SpawnedUnit);
+	return true;
 }
 
-void AUnitShop::ToggleShop()
+void AUnitShop::SetCurrency(int newAmount)
 {
-	Addon::Print("Shop Toggled!");
+	Currency = newAmount;
 }
+
+int AUnitShop::GetCurrency()
+{
+	return Currency;
+}
+
+int AUnitShop::GetStartCurrency()
+{
+	return StartCurrency;
+}
+
+void AUnitShop::AddCurrency(int CurrencyAdded)
+{
+	Currency += CurrencyAdded;
+}
+
+//void AUnitShop::SellUnit(AUnit* SellUnit)
+//{
+//	Player->GetOwnedUnits().Remove(SellUnit);
+//	SellUnit->Destroy();
+//	AddCurrency(SellUnit->GetCost());
+//}
 
 AUnit* AUnitShop::GetUnitAtIndex(int UnitIndex)
 {

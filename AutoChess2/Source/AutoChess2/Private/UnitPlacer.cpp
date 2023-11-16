@@ -25,3 +25,18 @@ void AUnitPlacer::Tick(float DeltaTime)
 
 }
 
+void AUnitPlacer::SetPickedUpUnit(AUnit* newUnit)
+{
+	PickedUpUnit = newUnit;
+}
+
+void AUnitPlacer::SetPickedUpUnitToNull()
+{
+	PickedUpUnit = nullptr;
+}
+
+AUnit* AUnitPlacer::GetPickedUpUnit()
+{
+	return PickedUpUnit;
+}
+

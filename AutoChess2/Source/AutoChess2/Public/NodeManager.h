@@ -27,4 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	APlacementNode* GetFirstUnoccupiedNode();
+	UFUNCTION(BlueprintCallable, category = "Node Manager")
+	void TogglePlacementNodes();
+
 };
