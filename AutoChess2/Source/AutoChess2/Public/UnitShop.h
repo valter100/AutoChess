@@ -63,5 +63,6 @@ public:
 	int GetStartCurrency();
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void AddCurrency(int currencyAdded);
+	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void SellUnit(AUnit* SellUnit);
 };

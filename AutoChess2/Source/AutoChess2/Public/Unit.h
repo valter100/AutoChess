@@ -46,6 +46,7 @@ protected:
 
 	//UUnitStats* UnitStats;
 
+	bool Sell;
 	bool IsDead;
 	float TimeSinceLastAttack;
 	UPROPERTY(EditAnywhere) AUnit* CurrentTarget;
@@ -102,4 +103,6 @@ public:
 	virtual bool GetDead();
 	void SetOpponentUnits(TArray<AUnit*> Units);
 	void ResetOnBoard();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual bool GetSell();
 };

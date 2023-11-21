@@ -53,7 +53,7 @@ void AUnitShop::RefreshSpawnUnits()
 {
 	for (int i = 0; i < SpawnedUnits.Num(); i++)
 	{
-		if (!SpawnedUnits[i]->GetIsBought())
+		if (SpawnedUnits[i] != nullptr && !SpawnedUnits[i]->GetIsBought())
 		{
 			SpawnedUnits[i]->Destroy();
 		}
@@ -125,9 +125,9 @@ void AUnitShop::AddCurrency(int CurrencyAdded)
 
 void AUnitShop::SellUnit(AUnit* SellUnit)
 {
-	//Player->GetOwnedUnits().Remove(SellUnit);
-	//SellUnit->Destroy();
-	//AddCurrency(SellUnit->GetCost());
+	Player->RemoveUnitFromOwnedUnits(SellUnit);
+	SellUnit->Destroy();
+	AddCurrency(SellUnit->GetCost());
 }
 
 AUnit* AUnitShop::GetUnitAtIndex(int UnitIndex)

@@ -139,10 +139,10 @@ void AUnit::Place()
 	{
 		SetOnBoard(true);
 	}
-	//else if (CurrentNode->ActorHasTag("Sell"))
-	//{
-	//	CurrentNode->SellUnit(this);
-	//}
+	else if (CurrentNode->ActorHasTag("Sell"))
+	{
+		Sell = true;
+	}
 }
 
 void AUnit::Lift()
@@ -348,5 +348,10 @@ void AUnit::ResetOnBoard()
 	CurrentTarget = nullptr;
 	SetActorLocation(CurrentNode->GetActorLocation());
 	SetActorHiddenInGame(false);
+}
+
+bool AUnit::GetSell()
+{
+	return Sell;
 }
 
