@@ -44,7 +44,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
-
 	void AddUnits();
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void RefreshUnits();
@@ -52,13 +51,10 @@ public:
 	void AddSpawnUnits();	
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void RefreshSpawnUnits();
-
 	UFUNCTION(BlueprintPure, category = "Unit Shop")
 	AUnit* GetUnitAtIndex(int UnitIndex);
-
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	bool BuyUnit(int UnitIndex);
-
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void SetCurrency(int newAmount);	
 	UFUNCTION(BlueprintPure, category = "Unit Shop")
@@ -67,5 +63,5 @@ public:
 	int GetStartCurrency();
 	UFUNCTION(BlueprintCallable, category = "Unit Shop")
 	void AddCurrency(int currencyAdded);
-	//void SellUnit(AUnit* SellUnit);
+	void SellUnit(AUnit* SellUnit);
 };

@@ -46,17 +46,23 @@ void AUnitShop::RefreshUnits()
 
 	}
 
-	for (AUnit* unit : SpawnedUnits)
+	RefreshSpawnUnits();
+}
+
+void AUnitShop::RefreshSpawnUnits()
+{
+	for (int i = 0; i < SpawnedUnits.Num(); i++)
 	{
-		if (!unit->GetIsBought())
+		if (!SpawnedUnits[i]->GetIsBought())
 		{
-			unit->Destroy();
+			SpawnedUnits[i]->Destroy();
 		}
-		
-		SpawnedUnits.Remove(unit);
+
+		SpawnedUnits.RemoveAt(i);
+		i--;
 	}
 
-	RefreshSpawnUnits();
+	AddSpawnUnits();
 }
 
 void AUnitShop::AddSpawnUnits()
@@ -75,27 +81,6 @@ void AUnitShop::AddSpawnUnits()
 	}
 }
 
-void AUnitShop::RefreshSpawnUnits()
-{
-	for (int i = 0; i < SpawnedUnits.Num(); i++)
-	{
-		SpawnedUnits.RemoveAt(i);
-		i--;
-	}
-
-	for (UClass* i : AvailableUnits)
-	{
-		SpawnedUnits.Add(GetWorld()->SpawnActor<AUnit>(i));
-	}
-
-	FVector spawnPosition(-10000, 0, 0);
-
-	for (AUnit* i : SpawnedUnits)
-	{
-		i->SetActorLocation(spawnPosition);
-		i->SetCost(FMath::RandRange(0, 10)); //Change to depend on stat changes and rarity
-	}
-}
 
 bool AUnitShop::BuyUnit(int UnitIndex)
 {
@@ -114,6 +99,7 @@ bool AUnitShop::BuyUnit(int UnitIndex)
 
 	Currency -= SpawnedUnit->GetCost();
 	Player->AddUnitToOwnedUnits(SpawnedUnit);
+
 	return true;
 }
 
@@ -137,12 +123,12 @@ void AUnitShop::AddCurrency(int CurrencyAdded)
 	Currency += CurrencyAdded;
 }
 
-//void AUnitShop::SellUnit(AUnit* SellUnit)
-//{
-//	Player->GetOwnedUnits().Remove(SellUnit);
-//	SellUnit->Destroy();
-//	AddCurrency(SellUnit->GetCost());
-//}
+void AUnitShop::SellUnit(AUnit* SellUnit)
+{
+	//Player->GetOwnedUnits().Remove(SellUnit);
+	//SellUnit->Destroy();
+	//AddCurrency(SellUnit->GetCost());
+}
 
 AUnit* AUnitShop::GetUnitAtIndex(int UnitIndex)
 {

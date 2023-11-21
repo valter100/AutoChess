@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PlacementNode.h"
+#include "UnitStats.h"
 #include "Addon.h"
 #include "Engine/Texture2D.h"
 #include "GameFramework/Actor.h"
@@ -24,8 +25,9 @@ protected:
 	UPROPERTY(EditAnywhere) int MaxHealth;
 	UPROPERTY(EditAnywhere) int CurrentHealth;
 	UPROPERTY(EditAnywhere) int MaxMana;
-	UPROPERTY(EditAnywhere) int CurrentMana;
+	int CurrentMana;
 	UPROPERTY(EditAnywhere) int ManaPerHit;
+	UPROPERTY(EditAnywhere) int ManaWhenHit;
 	UPROPERTY(EditAnywhere) FString Name;
 	UPROPERTY(EditAnywhere) float MovementSpeed;
 	UPROPERTY(EditAnywhere) float Damage;
@@ -41,6 +43,8 @@ protected:
 	UPROPERTY(EditAnywhere) bool Dead;
 	UPROPERTY(EditAnywhere) int Cost;
 	UPROPERTY(EditAnywhere) TArray<AUnit*> OpponentUnits;
+
+	//UUnitStats* UnitStats;
 
 	bool IsDead;
 	float TimeSinceLastAttack;
@@ -93,6 +97,8 @@ public:
 	virtual void SetCost(int NewCost);
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual int GetCost();
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void RandomizeStats();
 	virtual bool GetDead();
 	void SetOpponentUnits(TArray<AUnit*> Units);
 	void ResetOnBoard();

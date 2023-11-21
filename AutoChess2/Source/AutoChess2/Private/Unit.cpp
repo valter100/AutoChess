@@ -8,6 +8,7 @@ AUnit::AUnit()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	//UnitStats = FindComponentByClass<UUnitStats>();
 }
 
 // Called when the game starts or when spawned
@@ -221,6 +222,11 @@ void AUnit::TakeDamage(int DamageTaken)
 {
 	CurrentHealth -= DamageTaken;
 
+	if (CurrentMana < MaxMana)
+	{
+		CurrentMana += ManaWhenHit;
+	}
+
 	if (CurrentHealth <= 0)
 		Die();
 }
@@ -316,6 +322,11 @@ void AUnit::SetCost(int NewCost)
 int AUnit::GetCost()
 {
 	return Cost;
+}
+
+void AUnit::RandomizeStats()
+{
+
 }
 
 bool AUnit::GetDead()
