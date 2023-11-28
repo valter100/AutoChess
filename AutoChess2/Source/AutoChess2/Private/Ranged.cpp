@@ -2,6 +2,7 @@
 
 
 #include "Ranged.h"
+#include <RangedUnitStats.h>
 
 // Sets default values
 ARanged::ARanged()
@@ -14,8 +15,9 @@ ARanged::ARanged()
 // Called when the game starts or when spawned
 void ARanged::BeginPlay()
 {
+	stats = FindComponentByClass<URangedUnitStats>();
+
 	Super::BeginPlay();
-	
 }
 
 // Called every frame

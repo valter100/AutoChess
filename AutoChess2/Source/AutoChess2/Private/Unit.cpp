@@ -15,7 +15,6 @@ AUnit::AUnit()
 void AUnit::BeginPlay()
 {
 	Super::BeginPlay();
-	stats = FindComponentByClass<UUnitStats>();
 
 	IncreasedStat = stats->IncreaseRandomStat();
 	DecreasedStat = stats->DecreaseRandomStat();
@@ -280,9 +279,57 @@ FText AUnit::statData()
 	return FText::FromString("Cost: " + FString::FromInt(Cost) + "\n" + 
 		"Health: " + FString::SanitizeFloat(stats->GetMaxHealth()) + "\n" +
 		"Damage: " + FString::SanitizeFloat(stats->GetDamage()) + "\n" +
-		"Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond()) + "\n" + +"\n"+ 
-		"Increased Stat: " + IncreasedStat + +"\n" + 
-		"Decreased Stat: " + DecreasedStat);
+		"Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond()));
+}
+
+FText AUnit::AdvancedStatData()
+{
+	FString HealthText = "Health: " + FString::SanitizeFloat(stats->GetMaxHealth());
+	FString DamageText = "Damage: " + FString::SanitizeFloat(stats->GetDamage());;
+	FString AttackSpeedText = "Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond());
+	FString MovementSpeedText = "Movement Speed: " + FString::SanitizeFloat(stats->GetMovementSpeed());
+
+	if (IncreasedStat == "Max Health")
+	{
+		HealthText = "<Positive>Health: " + FString::SanitizeFloat(stats->GetMaxHealth()) + "</>";
+	}
+	else if (DecreasedStat == "Max Health")
+	{
+		HealthText = "<Negative>Health: " + FString::SanitizeFloat(stats->GetMaxHealth()) + "</>";
+	}
+
+	if (IncreasedStat == "Damage")
+	{
+		DamageText = "<Positive>Damage: " + FString::SanitizeFloat(stats->GetDamage()) + "</>";
+	}
+	else if (DecreasedStat == "Damage")
+	{
+		DamageText = "<Negative>Damage: " + FString::SanitizeFloat(stats->GetDamage()) + "</>";
+	}
+
+	if (IncreasedStat == "Attack Per Second")
+	{
+		AttackSpeedText = "<Positive>Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond()) + "</>";
+	}
+	else if (DecreasedStat == "Attack Per Second")
+	{
+		AttackSpeedText = "<Negative>Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond()) + "</>";
+	}
+
+	if (IncreasedStat == "Movement Speed")
+	{
+		MovementSpeedText = "<Positive>Movement Speed: " + FString::SanitizeFloat(stats->GetMovementSpeed()) + "</>";
+	}
+	else if (DecreasedStat == "Movement Speed")
+	{
+		MovementSpeedText = "<Negative>Movement Speed: " + FString::SanitizeFloat(stats->GetMovementSpeed()) + "</>";
+	}
+
+	return FText::FromString("Cost: " + FString::FromInt(Cost) + "\n" +
+		HealthText + "\n" +
+		DamageText + "\n" +
+		AttackSpeedText + "\n" + 
+		MovementSpeedText);
 }
 
 UTexture2D* AUnit::GetImageTex()

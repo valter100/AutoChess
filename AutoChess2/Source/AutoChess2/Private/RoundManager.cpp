@@ -56,3 +56,8 @@ float ARoundManager::GetTimeBetweenRounds()
 	return TimeBetweenRounds;
 }
 
+void ARoundManager::SetTimeBetweenRounds(float NewValue)
+{
+	TimeBetweenRounds = NewValue;
+}
+

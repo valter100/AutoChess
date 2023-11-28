@@ -14,11 +14,9 @@ class AUTOCHESS2_API ARoundManager : public AActor
 	GENERATED_BODY()
 	
 public:	
-	UPROPERTY(EditAnywhere)
 	AUnitShop* Shop;
-	UPROPERTY(EditAnywhere)
 		float RoundTimer;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadOnly)
 		float TimeBetweenRounds;
 
 	// Sets default values for this actor's properties
@@ -40,4 +38,6 @@ public:
 	void SetRoundTimer(float value);
 	UFUNCTION(BlueprintPure, Category = "Round Manager")
 	float GetTimeBetweenRounds();
+	UFUNCTION(BlueprintCallable, Category = "Round Manager")
+	void SetTimeBetweenRounds(float NewValue);
 };

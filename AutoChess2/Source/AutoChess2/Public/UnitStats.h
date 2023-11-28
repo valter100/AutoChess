@@ -7,7 +7,7 @@
 #include "UnitStats.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class AUTOCHESS2_API UUnitStats : public UActorComponent
 {
 	GENERATED_BODY()
@@ -37,9 +37,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	FString IncreaseRandomStat();
 	FString DecreaseRandomStat();
 	int GetMaxHealth();

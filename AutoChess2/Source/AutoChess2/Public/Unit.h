@@ -76,6 +76,8 @@ public:
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual FText statData();
 	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual FText AdvancedStatData();
+	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual UTexture2D* GetImageTex();
 	virtual bool GetIsBought();
 	virtual void SetIsBought(bool State);

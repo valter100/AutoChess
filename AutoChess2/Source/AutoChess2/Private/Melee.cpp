@@ -2,6 +2,7 @@
 
 
 #include "Melee.h"
+#include <MeleeUnitStats.h>
 
 // Sets default values
 AMelee::AMelee()
@@ -14,6 +15,8 @@ AMelee::AMelee()
 // Called when the game starts or when spawned
 void AMelee::BeginPlay()
 {
+	stats = FindComponentByClass<UMeleeUnitStats>();
+
 	Super::BeginPlay();
 	
 }

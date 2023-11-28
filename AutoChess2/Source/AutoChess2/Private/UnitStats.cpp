@@ -34,61 +34,60 @@ void UUnitStats::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 FString UUnitStats::IncreaseRandomStat()
 {
-	int statIndex = FMath::RandRange(0, ChangeableStats.Num());
-	//ChangeableStats.RemoveAt(statIndex);
+	if (ChangeableStats.Num() == 0)
+		return "";
+
+	int statIndex = FMath::RandRange(0, ChangeableStats.Num() - 1);
+	FString ChangedStat = ChangeableStats[statIndex];
+	ChangeableStats.RemoveAt(statIndex);
 
 	if (statIndex == 0)
 	{
 		MaxHealth += MaxHealthVariance;
-		return "Max Health";
 	}
 	if (statIndex == 1)
 	{
 		MovementSpeed += MovementSpeedVariance;
-		return "Movement Speed";
 	}
 	if (statIndex == 2)
 	{
 		Damage += DamageVariance;
-		return "Damage";
 	}
 	if (statIndex == 3)
 	{
 		AttacksPerSecond += AttacksPerSecondVariance;
-		return "Attack Per Second";
 	}
 
-	return "";
+	return ChangedStat;
 }
 
 FString UUnitStats::DecreaseRandomStat()
 {
-	int statIndex = FMath::RandRange(0, ChangeableStats.Num());
+	if (ChangeableStats.Num() == 0)
+		return "";
 
-	//ChangeableStats.RemoveAt(statIndex);
+	int statIndex = FMath::RandRange(0, ChangeableStats.Num() - 1);
+	FString ChangedStat = ChangeableStats[statIndex];
+	ChangeableStats.RemoveAt(statIndex);
 
 	if (statIndex == 0)
 	{
 		MaxHealth -= MaxHealthVariance;
-		return "Max Health";
 	}
 	if (statIndex == 1)
 	{
 		MovementSpeed -= MovementSpeedVariance;
-		return "Movement Speed";
 	}
 	if (statIndex == 2)
 	{
 		Damage -= DamageVariance;
-		return "Damage";
 	}
 	if (statIndex == 3)
 	{
 		AttacksPerSecond -= AttacksPerSecondVariance;
-		return "Attack Per Second";
 	}
 
-	return "";
+	return ChangedStat;
 }
 
 int UUnitStats::GetMaxHealth() { return MaxHealth; }
@@ -132,11 +131,4 @@ float UUnitStats::GetDamage() { return Damage; }
 float UUnitStats::GetAttackRange() { return AttackRange; }
 
 float UUnitStats::GetAttacksPerSecond() { return AttacksPerSecond; }
-
-//UUnitStats::Stat UUnitStats::GetRandomStat()
-//{
-//	int randomStatIndex = FMath::RandRange(0, (int)Stat::LastElement) - 1;
-//	Stat randomStat = Stat(randomStatIndex);
-//	return randomStat;
-//}
 
