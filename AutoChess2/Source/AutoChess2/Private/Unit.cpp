@@ -15,7 +15,12 @@ AUnit::AUnit()
 void AUnit::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentHealth = MaxHealth;
+	stats = FindComponentByClass<UUnitStats>();
+
+	IncreasedStat = stats->IncreaseRandomStat();
+	DecreasedStat = stats->DecreaseRandomStat();
+
+	stats->SetCurrentHealth(stats->GetMaxHealth());
 }
 
 void AUnit::Die()
@@ -55,9 +60,9 @@ void AUnit::Tick(float DeltaTime)
 
 		Move();
 
-		if (FVector::Distance(GetActorLocation(), CurrentTarget->GetActorLocation()) < AttackRange && TimeSinceLastAttack > 1 / AttacksPerSecond)
+		if (FVector::Distance(GetActorLocation(), CurrentTarget->GetActorLocation()) < stats->GetAttackRange() && TimeSinceLastAttack > 1 / stats->GetAttacksPerSecond())
 		{
-			if (CurrentMana >= MaxMana)
+			if (stats->GetCurrentMana() >= stats->GetMaxMana())
 			{
 				UseAbility();
 			}
@@ -72,6 +77,11 @@ void AUnit::Tick(float DeltaTime)
 void AUnit::SetPickedUp(bool state)
 {
 	PickedUp = state;
+}
+
+bool AUnit::GetPickedUp()
+{
+	return PickedUp;
 }
 
 void AUnit::TogglePickedUp()
@@ -164,13 +174,13 @@ void AUnit::Move()
 
 	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
 	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
-	if (Distance < AttackRange)
+	if (Distance < stats->GetAttackRange())
 		return;
 
 	FVector Direction = TargetLocation - GetActorLocation();
 	Direction.Normalize();
 
-	AddActorLocalOffset(Direction * MovementSpeed);
+	AddActorLocalOffset(Direction * stats->GetMovementSpeed());
 }
 
 void AUnit::Target()
@@ -200,10 +210,10 @@ void AUnit::Target()
 
 void AUnit::Attack()
 {
-	CurrentTarget->TakeDamage(Damage);
+	CurrentTarget->TakeDamage(stats->GetDamage());
 	TimeSinceLastAttack = 0;
 
-	CurrentMana += ManaPerHit;
+	stats->ChangeCurrentMana(stats->GetManaPerHit());
 
 	if (CurrentTarget->GetHealth() <= 0)
 	{
@@ -214,20 +224,20 @@ void AUnit::Attack()
 void AUnit::UseAbility()
 {
 	Addon::Print("Ability Used!");
-	CurrentMana = 0;
+	stats->SetCurrentMana(0);
 	TimeSinceLastAttack = 0;
 }
 
 void AUnit::TakeDamage(int DamageTaken)
 {
-	CurrentHealth -= DamageTaken;
+	stats->ChangeCurrentHealth(-DamageTaken);
 
-	if (CurrentMana < MaxMana)
+	if(stats->GetCurrentMana() < stats->GetMaxMana())
 	{
-		CurrentMana += ManaWhenHit;
+		stats->ChangeCurrentMana(stats->GetManaWhenHit());
 	}
 
-	if (CurrentHealth <= 0)
+	if (stats->GetCurrentHealth() <= 0)
 		Die();
 }
 
@@ -247,30 +257,32 @@ void AUnit::RemoveCurrentTargetFromList()
 
 int AUnit::GetHealth()
 {
-	return CurrentHealth;
+	return stats->GetCurrentHealth();
 }
 
 float AUnit::GetHealthPercentage()
 {
-	return float(CurrentHealth)/float(MaxHealth);
+	return float(stats->GetCurrentHealth())/float(stats->GetMaxHealth());
 }
 
 float AUnit::GetManaPercentage()
 {
-	return float(CurrentMana) / float(MaxMana);
+	return float(stats->GetCurrentMana()) / float(stats->GetMaxMana());
 }
 
 FText AUnit::GetNameOfUnit()
 {
-	return FText::FromString(Name);
+	return FText::FromString(stats->GetName());
 }
 
 FText AUnit::statData()
 {
 	return FText::FromString("Cost: " + FString::FromInt(Cost) + "\n" + 
-		"Health: " + FString::FromInt(MaxHealth) + "\n" +
-		"Damage: " + FString::FromInt(Damage) + "\n" +
-		"Attack Speed: " + FString::SanitizeFloat(AttacksPerSecond));
+		"Health: " + FString::SanitizeFloat(stats->GetMaxHealth()) + "\n" +
+		"Damage: " + FString::SanitizeFloat(stats->GetDamage()) + "\n" +
+		"Attack Speed: " + FString::SanitizeFloat(stats->GetAttacksPerSecond()) + "\n" + +"\n"+ 
+		"Increased Stat: " + IncreasedStat + +"\n" + 
+		"Decreased Stat: " + DecreasedStat);
 }
 
 UTexture2D* AUnit::GetImageTex()
@@ -341,8 +353,8 @@ void AUnit::SetOpponentUnits(TArray<AUnit*> Units)
 
 void AUnit::ResetOnBoard()
 {
-	CurrentHealth = MaxHealth;
-	CurrentMana = 0;
+	stats->SetCurrentHealth(stats->GetMaxHealth());
+	stats->SetCurrentMana(0);
 	TimeSinceLastAttack = 0;
 	Dead = false;
 	CurrentTarget = nullptr;

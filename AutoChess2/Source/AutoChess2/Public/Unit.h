@@ -22,34 +22,27 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere) UTexture2D* ImageTexture;
-	UPROPERTY(EditAnywhere) int MaxHealth;
-	UPROPERTY(EditAnywhere) int CurrentHealth;
-	UPROPERTY(EditAnywhere) int MaxMana;
-	int CurrentMana;
-	UPROPERTY(EditAnywhere) int ManaPerHit;
-	UPROPERTY(EditAnywhere) int ManaWhenHit;
-	UPROPERTY(EditAnywhere) FString Name;
-	UPROPERTY(EditAnywhere) float MovementSpeed;
-	UPROPERTY(EditAnywhere) float Damage;
-	UPROPERTY(EditAnywhere) float AttackRange;
-	UPROPERTY(EditAnywhere) float AttacksPerSecond;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Unit") bool PickedUp;
-	UPROPERTY(EditAnywhere) APlacementNode* HoveredNode;
-	UPROPERTY(EditAnywhere) APlacementNode* CurrentNode;
-	UPROPERTY(EditAnywhere) APlacementNode* LastNode;
-	UPROPERTY(EditAnywhere) bool IsBought;
-	UPROPERTY(EditAnywhere) bool OnBoard;
-	UPROPERTY(EditAnywhere) bool Active;
-	UPROPERTY(EditAnywhere) bool Dead;
 	UPROPERTY(EditAnywhere) int Cost;
-	UPROPERTY(EditAnywhere) TArray<AUnit*> OpponentUnits;
+	UPROPERTY(EditAnywhere) UUnitStats* stats;
 
-	//UUnitStats* UnitStats;
-
+	APlacementNode* HoveredNode;
+	APlacementNode* CurrentNode;
+	APlacementNode* LastNode;
+	AUnit* CurrentTarget;
+	bool PickedUp;
+	bool IsBought;
+	bool OnBoard;
+	bool Active;
+	bool Dead;
 	bool Sell;
 	bool IsDead;
 	float TimeSinceLastAttack;
-	UPROPERTY(EditAnywhere) AUnit* CurrentTarget;
+	TArray<AUnit*> OpponentUnits;
+
+	FString IncreasedStat;
+	FString DecreasedStat;
+	//UUnitStats* UnitStats;
+
 	//Ability ability;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -60,6 +53,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UFUNCTION(BlueprintCallable, category = "Unit")
 	virtual void SetPickedUp(bool state);
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual bool GetPickedUp();
 	UFUNCTION(BlueprintCallable, category = "Unit")
 	virtual void TogglePickedUp();
 	virtual void MoveToMouse();
