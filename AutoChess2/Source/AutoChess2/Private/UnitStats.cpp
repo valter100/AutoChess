@@ -41,19 +41,19 @@ FString UUnitStats::IncreaseRandomStat()
 	FString ChangedStat = ChangeableStats[statIndex];
 	ChangeableStats.RemoveAt(statIndex);
 
-	if (statIndex == 0)
+	if (ChangedStat == "Max Health")
 	{
 		MaxHealth += MaxHealthVariance;
 	}
-	if (statIndex == 1)
+	if (ChangedStat == "Movement Speed")
 	{
 		MovementSpeed += MovementSpeedVariance;
 	}
-	if (statIndex == 2)
+	if (ChangedStat == "Damage")
 	{
 		Damage += DamageVariance;
 	}
-	if (statIndex == 3)
+	if (ChangedStat == "Attack Per Second")
 	{
 		AttacksPerSecond += AttacksPerSecondVariance;
 	}
@@ -70,19 +70,19 @@ FString UUnitStats::DecreaseRandomStat()
 	FString ChangedStat = ChangeableStats[statIndex];
 	ChangeableStats.RemoveAt(statIndex);
 
-	if (statIndex == 0)
+	if (ChangedStat == "Max Health")
 	{
 		MaxHealth -= MaxHealthVariance;
 	}
-	if (statIndex == 1)
+	if (ChangedStat == "Movement Speed")
 	{
 		MovementSpeed -= MovementSpeedVariance;
 	}
-	if (statIndex == 2)
+	if (ChangedStat == "Damage")
 	{
 		Damage -= DamageVariance;
 	}
-	if (statIndex == 3)
+	if (ChangedStat == "Attack Per Second")
 	{
 		AttacksPerSecond -= AttacksPerSecondVariance;
 	}

@@ -46,6 +46,8 @@ void AUnit::Tick(float DeltaTime)
 
 	if (!CurrentTarget)
 	{
+		IsAttacking = false;
+		IsMoving = false;
 		Target();
 	}
 
@@ -167,19 +169,29 @@ void AUnit::Lift()
 void AUnit::Move()
 {
 	if (!CurrentTarget)
+	{
 		return;
+	}
 
 	FVector TargetLocation = CurrentTarget->GetActorLocation();
 
 	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
 	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
 	if (Distance < stats->GetAttackRange())
+	{
+		IsMoving = false;
 		return;
+	}
 
 	FVector Direction = TargetLocation - GetActorLocation();
 	Direction.Normalize();
 
+	//FVector RotationVector = GetActorLocation() - TargetLocation;
+	//FRotator facingRotation = Direction.Rotation();
+	//SetActorRotation(facingRotation, ETeleportType::None);
+
 	AddActorLocalOffset(Direction * stats->GetMovementSpeed());
+	IsMoving = true;
 }
 
 void AUnit::Target()
@@ -211,11 +223,12 @@ void AUnit::Attack()
 {
 	CurrentTarget->TakeDamage(stats->GetDamage());
 	TimeSinceLastAttack = 0;
-
+	IsAttacking = true;
 	stats->ChangeCurrentMana(stats->GetManaPerHit());
 
 	if (CurrentTarget->GetHealth() <= 0)
 	{
+		IsAttacking = false;
 		RemoveCurrentTargetFromList();
 	}
 }
@@ -405,6 +418,8 @@ void AUnit::ResetOnBoard()
 	TimeSinceLastAttack = 0;
 	Dead = false;
 	CurrentTarget = nullptr;
+	IsAttacking = false;
+	IsMoving = false;
 	SetActorLocation(CurrentNode->GetActorLocation());
 	SetActorHiddenInGame(false);
 }
@@ -413,4 +428,25 @@ bool AUnit::GetSell()
 {
 	return Sell;
 }
+
+bool AUnit::GetIsMoving()
+{
+	return IsMoving;
+}
+
+void AUnit::SetIsMoving(bool NewValue)
+{
+	IsMoving = NewValue;
+}
+
+bool AUnit::GetIsAttacking()
+{
+	return IsAttacking;
+}
+
+void AUnit::SetIsAttacking(bool NewValue)
+{
+	IsAttacking = NewValue;
+}
+
 

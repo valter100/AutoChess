@@ -36,6 +36,8 @@ protected:
 	bool Dead;
 	bool Sell;
 	bool IsDead;
+	bool IsMoving;
+	bool IsAttacking;
 	float TimeSinceLastAttack;
 	TArray<AUnit*> OpponentUnits;
 
@@ -102,4 +104,12 @@ public:
 	void ResetOnBoard();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual bool GetSell();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual bool GetIsMoving();	
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void SetIsMoving(bool NewValue);
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual bool GetIsAttacking();
+	UFUNCTION(BlueprintCallable, category = "Unit")
+	virtual void SetIsAttacking(bool NewValue);
 };
