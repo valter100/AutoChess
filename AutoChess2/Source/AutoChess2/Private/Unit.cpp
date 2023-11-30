@@ -338,7 +338,7 @@ FText AUnit::AdvancedStatData()
 		MovementSpeedText = "<Negative>Movement Speed: " + FString::SanitizeFloat(stats->GetMovementSpeed()) + "</>";
 	}
 
-	return FText::FromString("Cost: " + FString::FromInt(Cost) + "\n" +
+	return FText::FromString(
 		HealthText + "\n" +
 		DamageText + "\n" +
 		AttackSpeedText + "\n" + 
