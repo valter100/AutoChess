@@ -32,3 +32,9 @@ void UAIBehaviour::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
+void UAIBehaviour::SetStats(UUnitStats* NewStats)
+{
+	UnitStats = NewStats;
+}
+
+

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PlacementNode.h"
 #include "UnitStats.h"
+#include "AIBehaviour.h"
 #include "Addon.h"
 #include "Engine/Texture2D.h"
 #include "GameFramework/Actor.h"
@@ -24,6 +25,7 @@ protected:
 	UPROPERTY(EditAnywhere) UTexture2D* ImageTexture;
 	UPROPERTY(EditAnywhere) int Cost;
 	UPROPERTY(EditAnywhere) UUnitStats* stats;
+	UPROPERTY(EditAnywhere) UAIBehaviour* AIBehaviour;
 
 	APlacementNode* HoveredNode;
 	APlacementNode* CurrentNode;
@@ -43,10 +45,7 @@ protected:
 
 	FString IncreasedStat;
 	FString DecreasedStat;
-	//UUnitStats* UnitStats;
 
-	//Ability ability;
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Die();
 
@@ -57,8 +56,6 @@ public:
 	virtual void SetPickedUp(bool state);
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual bool GetPickedUp();
-	UFUNCTION(BlueprintCallable, category = "Unit")
-	virtual void TogglePickedUp();
 	virtual void MoveToMouse();
 	virtual void Place();
 	virtual void Lift();
@@ -112,4 +109,5 @@ public:
 	virtual bool GetIsAttacking();
 	UFUNCTION(BlueprintCallable, category = "Unit")
 	virtual void SetIsAttacking(bool NewValue);
+	virtual APlacementNode* GetCurrentNode();
 };

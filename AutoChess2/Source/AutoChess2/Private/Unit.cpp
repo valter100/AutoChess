@@ -2,13 +2,13 @@
 
 
 #include "Unit.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 AUnit::AUnit()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//UnitStats = FindComponentByClass<UUnitStats>();
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +20,8 @@ void AUnit::BeginPlay()
 	DecreasedStat = stats->DecreaseRandomStat();
 
 	stats->SetCurrentHealth(stats->GetMaxHealth());
+	AIBehaviour = FindComponentByClass<UAIBehaviour>();
+	AIBehaviour->SetStats(stats);
 }
 
 void AUnit::Die()
@@ -78,16 +80,6 @@ void AUnit::Tick(float DeltaTime)
 void AUnit::SetPickedUp(bool state)
 {
 	PickedUp = state;
-}
-
-bool AUnit::GetPickedUp()
-{
-	return PickedUp;
-}
-
-void AUnit::TogglePickedUp()
-{
-	PickedUp = !PickedUp;
 
 	if (!PickedUp)
 	{
@@ -98,6 +90,12 @@ void AUnit::TogglePickedUp()
 		Lift();
 	}
 }
+
+bool AUnit::GetPickedUp()
+{
+	return PickedUp;
+}
+
 
 void AUnit::MoveToMouse()
 {
@@ -118,8 +116,7 @@ void AUnit::MoveToMouse()
 			SetActorLocation(HitResult.ImpactPoint);
 			HoveredNode = nullptr;
 		}
-
-		else if (HitResult.GetActor()->ActorHasTag("Node"))
+		else if (!Cast<APlacementNode>(HitResult.GetActor())->GetOccupied())
 		{
 			SetActorLocation(HitResult.GetActor()->GetActorLocation());
 			HoveredNode = Cast<APlacementNode>(HitResult.GetActor());
@@ -129,7 +126,7 @@ void AUnit::MoveToMouse()
 
 void AUnit::Place()
 {
-	if (HoveredNode)
+	if (HoveredNode && !HoveredNode->GetOccupied())
 	{
 		CurrentNode = HoveredNode;
 		HoveredNode = nullptr;
@@ -138,6 +135,7 @@ void AUnit::Place()
 	{
 		CurrentNode = LastNode;
 		SetActorLocation(CurrentNode->GetActorLocation());
+		return;
 	}
 
 	CurrentNode->SetOccupied(true);
@@ -186,11 +184,12 @@ void AUnit::Move()
 	FVector Direction = TargetLocation - GetActorLocation();
 	Direction.Normalize();
 
-	//FVector RotationVector = GetActorLocation() - TargetLocation;
-	//FRotator facingRotation = Direction.Rotation();
-	//SetActorRotation(facingRotation, ETeleportType::None);
-
-	AddActorLocalOffset(Direction * stats->GetMovementSpeed());
+	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 5.0f);
+	SetActorRotation(NewRotation);
+	// Move the actor towards the target
+	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * stats->GetMovementSpeed());
+	SetActorLocation(NewLocation);
 	IsMoving = true;
 }
 
@@ -447,6 +446,11 @@ bool AUnit::GetIsAttacking()
 void AUnit::SetIsAttacking(bool NewValue)
 {
 	IsAttacking = NewValue;
+}
+
+APlacementNode* AUnit::GetCurrentNode()
+{
+	return CurrentNode;
 }
 
 

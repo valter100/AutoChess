@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-//#include "UnitShop.h"
+#include "Addon.h"
 #include "PlacementNode.generated.h"
 
 UCLASS()
@@ -14,6 +14,8 @@ class AUTOCHESS2_API APlacementNode : public AActor
 	
 public:	
 	UPROPERTY(EditAnywhere) bool Occupied;
+	UPROPERTY(EditAnywhere) FVector NormalScale;
+	UPROPERTY(EditAnywhere) FVector HoveredScale;
 	//UPROPERTY(EditAnywhere) AUnitShop* Shop;
 	// Sets default values for this actor's properties
 	APlacementNode();
@@ -27,5 +29,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void SetOccupied(bool state);
 	bool GetOccupied();
+	void HighlightNode();
+	void UnhighlightNode();
 	//void SellUnit(AUnit* SellUnit);
 };

@@ -14,7 +14,7 @@ class AUTOCHESS2_API AUnitPlacer : public AActor
 	GENERATED_BODY()
 	
 public:	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	AUnit* PickedUpUnit;
 	// Sets default values for this actor's properties
 	AUnitPlacer();

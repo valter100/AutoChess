@@ -35,6 +35,18 @@ bool APlacementNode::GetOccupied()
 	return Occupied;
 }
 
+void APlacementNode::HighlightNode()
+{
+	Addon::Print("SCALING UP");
+	SetActorScale3D(HoveredScale);
+}
+
+void APlacementNode::UnhighlightNode()
+{
+	Addon::Print("SCALING DOWN");
+	SetActorScale3D(NormalScale);
+}
+
 //void APlacementNode::SellUnit(AUnit* SellUnit)
 //{
 //	Shop->SellUnit(SellUnit);

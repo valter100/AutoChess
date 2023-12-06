@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "UnitStats.h"
 #include "AIBehaviour.generated.h"
 
 
@@ -15,7 +16,7 @@ class AUTOCHESS2_API UAIBehaviour : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UAIBehaviour();
-
+	UUnitStats* UnitStats;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -23,6 +24,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
+	void SetStats(UUnitStats* NewStats);
 		
 };
