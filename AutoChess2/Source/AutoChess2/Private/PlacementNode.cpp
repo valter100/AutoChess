@@ -6,7 +6,7 @@
 // Sets default values
 APlacementNode::APlacementNode()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -15,7 +15,7 @@ APlacementNode::APlacementNode()
 void APlacementNode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -37,13 +37,14 @@ bool APlacementNode::GetOccupied()
 
 void APlacementNode::HighlightNode()
 {
-	Addon::Print("SCALING UP");
-	SetActorScale3D(HoveredScale);
+	if (!Occupied)
+	{
+		SetActorScale3D(HoveredScale);
+	}
 }
 
 void APlacementNode::UnhighlightNode()
 {
-	Addon::Print("SCALING DOWN");
 	SetActorScale3D(NormalScale);
 }
 

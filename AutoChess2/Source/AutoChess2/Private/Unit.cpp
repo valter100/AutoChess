@@ -151,6 +151,7 @@ void AUnit::Place()
 	else if (CurrentNode->ActorHasTag("Sell"))
 	{
 		Sell = true;
+		CurrentNode->SetOccupied(false);
 	}
 }
 
@@ -175,19 +176,20 @@ void AUnit::Move()
 
 	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
 	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
+
+	FVector Direction = TargetLocation - GetActorLocation();
+	Direction.Normalize();
+
+	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+	SetActorRotation(NewRotation);
+	// Move the actor towards the target
 	if (Distance < stats->GetAttackRange())
 	{
 		IsMoving = false;
 		return;
 	}
 
-	FVector Direction = TargetLocation - GetActorLocation();
-	Direction.Normalize();
-
-	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
-	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 5.0f);
-	SetActorRotation(NewRotation);
-	// Move the actor towards the target
 	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * stats->GetMovementSpeed());
 	SetActorLocation(NewLocation);
 	IsMoving = true;
@@ -242,6 +244,8 @@ void AUnit::UseAbility()
 void AUnit::TakeDamage(int DamageTaken)
 {
 	stats->ChangeCurrentHealth(-DamageTaken);
+
+	PlayDamagedEffect(GetActorLocation());
 
 	if(stats->GetCurrentMana() < stats->GetMaxMana())
 	{
@@ -451,6 +455,16 @@ void AUnit::SetIsAttacking(bool NewValue)
 APlacementNode* AUnit::GetCurrentNode()
 {
 	return CurrentNode;
+}
+
+float AUnit::GetMovementSpeed()
+{
+	return stats->GetMovementSpeed();
+}
+
+float AUnit::GetAttackSpeed()
+{
+	return stats->GetAttacksPerSecond();
 }
 
 

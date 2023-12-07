@@ -64,6 +64,8 @@ public:
 	virtual void Attack();
 	virtual void UseAbility();
 	virtual void TakeDamage(int DamageTaken);
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDamagedEffect(FVector HitLocation);
 	virtual void RemoveCurrentTargetFromList();
 	virtual int GetHealth();
 	UFUNCTION(BlueprintPure, category = "Unit")
@@ -110,4 +112,8 @@ public:
 	UFUNCTION(BlueprintCallable, category = "Unit")
 	virtual void SetIsAttacking(bool NewValue);
 	virtual APlacementNode* GetCurrentNode();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual float GetMovementSpeed();
+	UFUNCTION(BlueprintPure, category = "Unit")
+	virtual float GetAttackSpeed();
 };
