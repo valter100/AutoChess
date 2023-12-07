@@ -4,12 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Unit.h>
 #include "Projectile.generated.h"
 
 UCLASS()
 class AUTOCHESS2_API AProjectile : public AActor
 {
 	GENERATED_BODY()
+	UPROPERTY(EditAnywhere)
+	AUnit* Target;
+	float Damage;
+
+	UPROPERTY(EditAnywhere)
+	float LifeTime;
+	float TimeAlive;
+
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -22,5 +33,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	void SetTarget(AUnit* NewTarget);
+	void SetDamage(float NewDamage);
+	void Move();
 };

@@ -20,6 +20,31 @@ void ARanged::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ARanged::Attack()
+{
+	TimeSinceLastAttack = 0;
+	stats->ChangeCurrentMana(stats->GetManaPerHit());
+	IsAttacking = true;
+
+	if (CurrentTarget->GetHealth() <= 0)
+	{
+		IsAttacking = false;
+		RemoveCurrentTargetFromList();
+	}
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	// Spawn the projectile at the muzzle.
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+	if (Projectile)
+	{
+		Projectile->SetDamage(stats->GetDamage());
+		Projectile->SetTarget(CurrentTarget);
+	}
+}
+
 // Called every frame
 void ARanged::Tick(float DeltaTime)
 {

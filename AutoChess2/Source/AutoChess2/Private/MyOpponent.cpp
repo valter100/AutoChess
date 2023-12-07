@@ -54,20 +54,20 @@ void AMyOpponent::SpawnUnits()
 
 		if (i->IsA<AMelee>())
 		{
-			Node = GetUnnocupiedNode(FrontLine);
+			Node = GetRandomUnnocupiedNode(FrontLine);
 
 			if (Node == nullptr)
 			{
-				Node = GetUnnocupiedNode(BackLine);
+				Node = GetRandomUnnocupiedNode(BackLine);
 			}
 		}
 		else if(i->IsA<ARanged>())
 		{
-			Node = GetUnnocupiedNode(BackLine);
+			Node = GetRandomUnnocupiedNode(BackLine);
 
 			if (Node == nullptr)
 			{
-				Node = GetUnnocupiedNode(FrontLine);
+				Node = GetRandomUnnocupiedNode(FrontLine);
 			}
 		}
 
@@ -115,12 +115,25 @@ void AMyOpponent::CleanUpUnits()
 	}
 }
 
-APlacementNode* AMyOpponent::GetUnnocupiedNode(TArray<APlacementNode*> NodeArray)
+APlacementNode* AMyOpponent::GetRandomUnnocupiedNode(TArray<APlacementNode*> NodeArray)
 {
+	int randomIndex = FMath::RandRange(0, NodeArray.Num() - 1);
+
 	for (APlacementNode* i : NodeArray)
 	{
-		if (i->GetOccupied() == false)
-			return i;
+		if (!NodeArray[randomIndex]->GetOccupied())
+		{
+			return NodeArray[randomIndex];
+		}
+		else
+		{
+			randomIndex++;
+
+			if (randomIndex == NodeArray.Num())
+			{
+				randomIndex = 0;
+			}
+		}
 	}
 
 	return nullptr;

@@ -2,6 +2,7 @@
 
 
 #include "Projectile.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 AProjectile::AProjectile()
@@ -15,13 +16,52 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
+	TimeAlive += DeltaTime;
+
+	if (Target->GetDead() || TimeAlive >= LifeTime)
+	{
+		Destroy();
+	}
+
 	Super::Tick(DeltaTime);
 
+	Move();
+
+	float DistanceToTarget = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
+	if (DistanceToTarget < 10)
+	{
+		Target->TakeDamage(Damage);
+		Destroy();
+	}
+}
+
+void AProjectile::SetTarget(AUnit* NewTarget)
+{
+	Target = NewTarget;
+}
+
+void AProjectile::SetDamage(float NewDamage)
+{
+	Damage = NewDamage;
+}
+
+void AProjectile::Move()
+{
+	FVector TargetLocation = Target->GetActorLocation();
+
+	FVector Direction = TargetLocation - GetActorLocation();
+	Direction.Normalize();
+
+	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+	SetActorRotation(NewRotation);
+
+	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * MovementSpeed);
+	SetActorLocation(NewLocation);
 }
 

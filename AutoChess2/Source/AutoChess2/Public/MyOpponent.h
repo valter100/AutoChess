@@ -49,7 +49,7 @@ public:
 	void SpawnUnits();
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void CleanUpUnits();
-	APlacementNode* GetUnnocupiedNode(TArray<APlacementNode*> NodeArray);
+	APlacementNode* GetRandomUnnocupiedNode(TArray<APlacementNode*> NodeArray);
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void ActivateUnits();
 	UFUNCTION(BlueprintCallable, category = "Opponent")
