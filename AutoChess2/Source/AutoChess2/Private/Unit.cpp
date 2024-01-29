@@ -112,10 +112,13 @@ void AUnit::MoveToMouse()
 			SetActorLocation(HitResult.ImpactPoint);
 			HoveredNode = nullptr;
 		}
-		else if (!Cast<APlacementNode>(HitResult.GetActor())->GetOccupied())
+		else if (Cast<APlacementNode>(HitResult.GetActor()))
 		{
-			SetActorLocation(HitResult.GetActor()->GetActorLocation());
-			HoveredNode = Cast<APlacementNode>(HitResult.GetActor());
+			if (!Cast<APlacementNode>(HitResult.GetActor())->GetOccupied())
+			{
+				SetActorLocation(HitResult.GetActor()->GetActorLocation());
+				HoveredNode = Cast<APlacementNode>(HitResult.GetActor());
+			}
 		}
 	}
 }
