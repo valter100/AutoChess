@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include <Unit.h>
+#include "AIBehaviour.h"
 #include "Projectile.generated.h"
 
 UCLASS()

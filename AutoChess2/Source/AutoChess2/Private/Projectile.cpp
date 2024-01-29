@@ -35,7 +35,7 @@ void AProjectile::Tick(float DeltaTime)
 	float DistanceToTarget = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
 	if (DistanceToTarget < 10)
 	{
-		Target->TakeDamage(Damage);
+		Target->ReceiveDamage(Damage);
 		Destroy();
 	}
 }

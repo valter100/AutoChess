@@ -24,12 +24,6 @@ void AUnit::BeginPlay()
 	AIBehaviour->SetStats(stats);
 }
 
-void AUnit::Die()
-{
-	SetActorHiddenInGame(true);
-	Dead = true;
-}
-
 // Called every frame
 void AUnit::Tick(float DeltaTime)
 {
@@ -41,12 +35,14 @@ void AUnit::Tick(float DeltaTime)
 		return;
 	}
 
-	if (!OnBoard || Dead || !Active)
+	if (!OnBoard || !Active || AIBehaviour->IsDead())
 		return;
+	
+	AIBehaviour->DecideBehaviour();
 
-	TimeSinceLastAttack += DeltaTime;
+	/*TimeSinceLastAttack += DeltaTime;*/
 
-	if (!CurrentTarget)
+	/*if (!CurrentTarget)
 	{
 		IsAttacking = false;
 		IsMoving = false;
@@ -74,7 +70,7 @@ void AUnit::Tick(float DeltaTime)
 				Attack();
 			}
 		}
-	}
+	}*/
 }
 
 void AUnit::SetPickedUp(bool state)
@@ -129,11 +125,13 @@ void AUnit::Place()
 	if (HoveredNode && !HoveredNode->GetOccupied())
 	{
 		CurrentNode = HoveredNode;
+		AIBehaviour->SetCurrentNode(HoveredNode);
 		HoveredNode = nullptr;
 	}
 	else
 	{
 		CurrentNode = LastNode;
+		AIBehaviour->SetCurrentNode(LastNode);
 		SetActorLocation(CurrentNode->GetActorLocation());
 		return;
 	}
@@ -162,113 +160,116 @@ void AUnit::Lift()
 		LastNode = CurrentNode;
 		CurrentNode->SetOccupied(false);
 		CurrentNode = nullptr;
+		//AIBehaviour->SetCurrentNode(nullptr);
 	}
 }
 
-void AUnit::Move()
+//void AUnit::Move()
+//{
+//	if (!CurrentTarget)
+//	{
+//		return;
+//	}
+//
+//	FVector TargetLocation = CurrentTarget->GetActorLocation();
+//
+//	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
+//	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
+//
+//	FVector Direction = TargetLocation - GetActorLocation();
+//	Direction.Normalize();
+//
+//	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
+//	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+//	SetActorRotation(NewRotation);
+//	// Move the actor towards the target
+//	if (Distance < stats->GetAttackRange())
+//	{
+//		IsMoving = false;
+//		return;
+//	}
+//
+//	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * stats->GetMovementSpeed());
+//	SetActorLocation(NewLocation);
+//	IsMoving = true;
+//}
+
+//void AUnit::Target()
+//{
+//	float ClosestDistance = FLT_MAX;
+//	AUnit* ClosestUnit = nullptr;
+//
+//	for (int i = 0; i < OpponentUnits.Num(); i++)
+//	{
+//		if (OpponentUnits[i] == nullptr)
+//			continue;
+//
+//		float distanceToUnit = FVector::Distance(GetActorLocation(), OpponentUnits[i]->GetActorLocation());
+//
+//		if (distanceToUnit < ClosestDistance)
+//		{
+//			ClosestDistance = distanceToUnit;
+//			ClosestUnit = OpponentUnits[i];
+//		}
+//	}
+//
+//	if (ClosestUnit)
+//	{
+//		CurrentTarget = ClosestUnit;
+//	}
+//}
+
+//void AUnit::Attack()
+//{
+//	CurrentTarget->TakeDamage(stats->GetDamage());
+//	TimeSinceLastAttack = 0;
+//	IsAttacking = true;
+//	stats->ChangeCurrentMana(stats->GetManaPerHit());
+//
+//	if (CurrentTarget->GetHealth() <= 0)
+//	{
+//		IsAttacking = false;
+//		RemoveCurrentTargetFromList();
+//	}
+//}
+
+//void AUnit::UseAbility()
+//{
+//	Addon::Print("Ability Used!");
+//	stats->SetCurrentMana(0);
+//	TimeSinceLastAttack = 0;
+//}
+
+void AUnit::ReceiveDamage(int DamageTaken)
 {
-	if (!CurrentTarget)
-	{
-		return;
-	}
+	AIBehaviour->TakeDamage(DamageTaken);
 
-	FVector TargetLocation = CurrentTarget->GetActorLocation();
+	//stats->ChangeCurrentHealth(-DamageTaken);
 
-	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
-	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
+	//PlayDamagedEffect(GetActorLocation());
 
-	FVector Direction = TargetLocation - GetActorLocation();
-	Direction.Normalize();
+	//if(stats->GetCurrentMana() < stats->GetMaxMana())
+	//{
+	//	stats->ChangeCurrentMana(stats->GetManaWhenHit());
+	//}
 
-	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
-	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
-	SetActorRotation(NewRotation);
-	// Move the actor towards the target
-	if (Distance < stats->GetAttackRange())
-	{
-		IsMoving = false;
-		return;
-	}
-
-	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * stats->GetMovementSpeed());
-	SetActorLocation(NewLocation);
-	IsMoving = true;
+	//if (stats->GetCurrentHealth() <= 0)
+	//	Die();
 }
 
-void AUnit::Target()
-{
-	float ClosestDistance = FLT_MAX;
-	AUnit* ClosestUnit = nullptr;
-
-	for (int i = 0; i < OpponentUnits.Num(); i++)
-	{
-		if (OpponentUnits[i] == nullptr)
-			continue;
-
-		float distanceToUnit = FVector::Distance(GetActorLocation(), OpponentUnits[i]->GetActorLocation());
-
-		if (distanceToUnit < ClosestDistance)
-		{
-			ClosestDistance = distanceToUnit;
-			ClosestUnit = OpponentUnits[i];
-		}
-	}
-
-	if (ClosestUnit)
-	{
-		CurrentTarget = ClosestUnit;
-	}
-}
-
-void AUnit::Attack()
-{
-	CurrentTarget->TakeDamage(stats->GetDamage());
-	TimeSinceLastAttack = 0;
-	IsAttacking = true;
-	stats->ChangeCurrentMana(stats->GetManaPerHit());
-
-	if (CurrentTarget->GetHealth() <= 0)
-	{
-		IsAttacking = false;
-		RemoveCurrentTargetFromList();
-	}
-}
-
-void AUnit::UseAbility()
-{
-	Addon::Print("Ability Used!");
-	stats->SetCurrentMana(0);
-	TimeSinceLastAttack = 0;
-}
-
-void AUnit::TakeDamage(int DamageTaken)
-{
-	stats->ChangeCurrentHealth(-DamageTaken);
-
-	PlayDamagedEffect(GetActorLocation());
-
-	if(stats->GetCurrentMana() < stats->GetMaxMana())
-	{
-		stats->ChangeCurrentMana(stats->GetManaWhenHit());
-	}
-
-	if (stats->GetCurrentHealth() <= 0)
-		Die();
-}
-
-void AUnit::RemoveCurrentTargetFromList()
-{
-	for (int i = 0; i < OpponentUnits.Num(); i++)
-	{
-		if (OpponentUnits[i] == CurrentTarget)
-		{
-			CurrentTarget = nullptr;
-			OpponentUnits[i] = OpponentUnits[OpponentUnits.Num() - 1];
-			OpponentUnits.SetNum(OpponentUnits.Num() - 1);
-			return;
-		}
-	}
-}
+//void AUnit::RemoveCurrentTargetFromList()
+//{
+//	for (int i = 0; i < OpponentUnits.Num(); i++)
+//	{
+//		if (OpponentUnits[i] == CurrentTarget)
+//		{
+//			CurrentTarget = nullptr;
+//			OpponentUnits[i] = OpponentUnits[OpponentUnits.Num() - 1];
+//			OpponentUnits.SetNum(OpponentUnits.Num() - 1);
+//			return;
+//		}
+//	}
+//}
 
 int AUnit::GetHealth()
 {
@@ -399,30 +400,24 @@ int AUnit::GetCost()
 	return Cost;
 }
 
-void AUnit::RandomizeStats()
-{
-
-}
 
 bool AUnit::GetDead()
 {
-	return Dead;
+	return AIBehaviour->IsDead();
 }
 
 void AUnit::SetOpponentUnits(TArray<AUnit*> Units)
 {
-	OpponentUnits = Units;
+	AIBehaviour->SetOpponentUnits(Units);
 }
 
 void AUnit::ResetOnBoard()
 {
 	stats->SetCurrentHealth(stats->GetMaxHealth());
 	stats->SetCurrentMana(0);
-	TimeSinceLastAttack = 0;
-	Dead = false;
-	CurrentTarget = nullptr;
-	IsAttacking = false;
-	IsMoving = false;
+
+	AIBehaviour->Reset();
+
 	SetActorLocation(CurrentNode->GetActorLocation());
 	SetActorHiddenInGame(false);
 }
@@ -434,22 +429,12 @@ bool AUnit::GetSell()
 
 bool AUnit::GetIsMoving()
 {
-	return IsMoving;
-}
-
-void AUnit::SetIsMoving(bool NewValue)
-{
-	IsMoving = NewValue;
+	return AIBehaviour->IsMoving();
 }
 
 bool AUnit::GetIsAttacking()
 {
-	return IsAttacking;
-}
-
-void AUnit::SetIsAttacking(bool NewValue)
-{
-	IsAttacking = NewValue;
+	return AIBehaviour->IsAttacking();
 }
 
 APlacementNode* AUnit::GetCurrentNode()
@@ -465,6 +450,11 @@ float AUnit::GetMovementSpeed()
 float AUnit::GetAttackSpeed()
 {
 	return stats->GetAttacksPerSecond();
+}
+
+UAIBehaviour* AUnit::GetBehaviour()
+{
+	return AIBehaviour;
 }
 
 

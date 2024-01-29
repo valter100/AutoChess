@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "PlacementNode.h"
 #include "UnitStats.h"
-#include "AIBehaviour.h"
 #include "Addon.h"
 #include "Engine/Texture2D.h"
 #include "GameFramework/Actor.h"
 #include "Unit.generated.h"
+
+class UAIBehaviour;
 
 UCLASS(Abstract)
 class AUTOCHESS2_API AUnit : public AActor
@@ -30,24 +31,17 @@ protected:
 	APlacementNode* HoveredNode;
 	APlacementNode* CurrentNode;
 	APlacementNode* LastNode;
-	AUnit* CurrentTarget;
 	bool PickedUp;
 	bool IsBought;
 	bool OnBoard;
 	bool Active;
-	bool Dead;
 	bool Sell;
 	bool IsDead;
-	bool IsMoving;
-	bool IsAttacking;
-	float TimeSinceLastAttack;
-	TArray<AUnit*> OpponentUnits;
 
 	FString IncreasedStat;
 	FString DecreasedStat;
 
 	virtual void BeginPlay() override;
-	virtual void Die();
 
 public:	
 	// Called every frame
@@ -59,14 +53,7 @@ public:
 	virtual void MoveToMouse();
 	virtual void Place();
 	virtual void Lift();
-	virtual void Move();
-	virtual void Target();
-	virtual void Attack();
-	virtual void UseAbility();
-	virtual void TakeDamage(int DamageTaken);
-	UFUNCTION(BlueprintImplementableEvent)
-	void PlayDamagedEffect(FVector HitLocation);
-	virtual void RemoveCurrentTargetFromList();
+	virtual void ReceiveDamage(int DamageTaken);
 	virtual int GetHealth();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual float GetHealthPercentage();	
@@ -96,8 +83,6 @@ public:
 	virtual void SetCost(int NewCost);
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual int GetCost();
-	UFUNCTION(BlueprintCallable, category = "Unit")
-	virtual void RandomizeStats();
 	virtual bool GetDead();
 	void SetOpponentUnits(TArray<AUnit*> Units);
 	void ResetOnBoard();
@@ -105,15 +90,12 @@ public:
 	virtual bool GetSell();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual bool GetIsMoving();	
-	UFUNCTION(BlueprintCallable, category = "Unit")
-	virtual void SetIsMoving(bool NewValue);
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual bool GetIsAttacking();
-	UFUNCTION(BlueprintCallable, category = "Unit")
-	virtual void SetIsAttacking(bool NewValue);
 	virtual APlacementNode* GetCurrentNode();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual float GetMovementSpeed();
 	UFUNCTION(BlueprintPure, category = "Unit")
 	virtual float GetAttackSpeed();
+	virtual UAIBehaviour* GetBehaviour();
 };

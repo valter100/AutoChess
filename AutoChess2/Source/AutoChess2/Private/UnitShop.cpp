@@ -77,8 +77,6 @@ void AUnitShop::AddSpawnUnits()
 	for (AUnit* i : SpawnedUnits)
 	{
 		i->SetActorLocation(spawnPosition);
-		i->RandomizeStats();
-		//i->SetCost(FMath::RandRange(0, 10)); //Change to depend on stat changes and rarity
 	}
 }
 
