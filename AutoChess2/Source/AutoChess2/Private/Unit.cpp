@@ -20,7 +20,7 @@ void AUnit::BeginPlay()
 	DecreasedStat = stats->DecreaseRandomStat();
 
 	stats->SetCurrentHealth(stats->GetMaxHealth());
-	AIBehaviour = FindComponentByClass<UAIBehaviour>();
+	
 	AIBehaviour->SetStats(stats);
 }
 

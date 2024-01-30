@@ -3,6 +3,7 @@
 
 #include "Ranged.h"
 #include <RangedUnitStats.h>
+#include <RangedAIBehaviour.h>
 
 // Sets default values
 ARanged::ARanged()
@@ -16,6 +17,7 @@ ARanged::ARanged()
 void ARanged::BeginPlay()
 {
 	stats = FindComponentByClass<URangedUnitStats>();
+	AIBehaviour = FindComponentByClass<URangedAIBehaviour>();
 
 	Super::BeginPlay();
 }

@@ -160,8 +160,7 @@ void UAIBehaviour::Move()
 
 void UAIBehaviour::Attack()
 {
-	Addon::Print("NORMAL ATTACK");
-
+	Addon::Print(GetOwner()->GetName() + " Damaged " + CurrentTarget->GetName() + " for " + FString::SanitizeFloat(UnitStats->GetDamage()));
 	CurrentTarget->GetBehaviour()->TakeDamage(UnitStats->GetDamage());
 	TimeSinceLastAttack = 0;
 	Attacking = true;

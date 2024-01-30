@@ -16,7 +16,7 @@ AMelee::AMelee()
 void AMelee::BeginPlay()
 {
 	stats = FindComponentByClass<UMeleeUnitStats>();
-
+	AIBehaviour = FindComponentByClass<UAIBehaviour>();
 	Super::BeginPlay();
 	
 }

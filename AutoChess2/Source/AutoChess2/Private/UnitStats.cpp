@@ -2,6 +2,7 @@
 
 
 #include "UnitStats.h"
+#include <Addon.h>
 
 // Sets default values for this component's properties
 UUnitStats::UUnitStats()
@@ -96,6 +97,7 @@ int UUnitStats::GetCurrentHealth() { return CurrentHealth;}
 
 void UUnitStats::ChangeCurrentHealth(int ValueChange)
 {
+	Addon::Print("HEALTH CHANGED");
 	CurrentHealth += ValueChange;
 }
 
