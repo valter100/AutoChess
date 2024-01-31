@@ -17,6 +17,7 @@ UAIBehaviour::UAIBehaviour()
 
 void UAIBehaviour::DecideBehaviour()
 {
+	// If there is no target
 	if (!CurrentTarget)
 	{
 		Attacking = false;
@@ -24,18 +25,24 @@ void UAIBehaviour::DecideBehaviour()
 		Target();
 	}
 
+	// If there is a target
 	if (CurrentTarget != nullptr)
 	{
+		// If the target is dead
 		if (CurrentTarget->GetDead())
 		{
+			//Remove the target from targetable enemies list
 			RemoveCurrentTargetFromList();
 			return;
 		}
 
+		// Try to move towards the target
 		Move();
 
+		// If target is within range
 		if (FVector::Distance(GetOwner()->GetActorLocation(), CurrentTarget->GetActorLocation()) < UnitStats->GetAttackRange() && TimeSinceLastAttack > 1 / UnitStats->GetAttacksPerSecond())
 		{
+			// If the units mana is full
 			if (UnitStats->GetCurrentMana() >= UnitStats->GetMaxMana())
 			{
 				UseAbility();
@@ -69,6 +76,7 @@ void UAIBehaviour::Target()
 	float ClosestDistance = FLT_MAX;
 	AUnit* ClosestUnit = nullptr;
 
+	// Loop through opponents units and find the one closest to the unit
 	for (int i = 0; i < OpponentUnits.Num(); i++)
 	{
 		if (OpponentUnits[i] == nullptr)
@@ -135,24 +143,26 @@ void UAIBehaviour::Move()
 		return;
 	}
 
+	// Calculate the distance and direction vector towards the current target
 	FVector TargetLocation = CurrentTarget->GetActorLocation();
-
 	float Distance = FVector::Distance(GetOwner()->GetActorLocation(), TargetLocation);
-	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
-
 	FVector Direction = TargetLocation - GetOwner()->GetActorLocation();
 	Direction.Normalize();
 
+	// Rotate the unit towards the current target
 	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
 	FRotator NewRotation = FMath::RInterpTo(GetOwner()->GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
 	GetOwner()->SetActorRotation(NewRotation);
-	// Move the actor towards the target
+
+
+	// Cancel movement if unit is within range of target
 	if (Distance < UnitStats->GetAttackRange())
 	{
 		Moving = false;
 		return;
 	}
 
+	// Perform the movement
 	FVector NewLocation = GetOwner()->GetActorLocation() + (GetOwner()->GetActorForwardVector() * UnitStats->GetMovementSpeed());
 	GetOwner()->SetActorLocation(NewLocation);
 	Moving = true;
@@ -160,12 +170,16 @@ void UAIBehaviour::Move()
 
 void UAIBehaviour::Attack()
 {
-	Addon::Print(GetOwner()->GetName() + " Damaged " + CurrentTarget->GetName() + " for " + FString::SanitizeFloat(UnitStats->GetDamage()));
+	// Deal damage to the target through their behaviour script
 	CurrentTarget->GetBehaviour()->TakeDamage(UnitStats->GetDamage());
-	TimeSinceLastAttack = 0;
-	Attacking = true;
+
+	// Increase mana
 	UnitStats->ChangeCurrentMana(UnitStats->GetManaPerHit());
 
+	TimeSinceLastAttack = 0;
+	Attacking = true;
+
+	// If the targets health is equal to or below zero, remove from target list
 	if (CurrentTarget->GetHealth() <= 0)
 	{
 		Attacking = false;
@@ -175,7 +189,7 @@ void UAIBehaviour::Attack()
 
 void UAIBehaviour::UseAbility()
 {
-	Addon::Print("Ability Used!");
+	// Implement ability here //
 	UnitStats->SetCurrentMana(0);
 	TimeSinceLastAttack = 0;
 }
@@ -184,6 +198,7 @@ void UAIBehaviour::TakeDamage(int DamageTaken)
 {
 	UnitStats->ChangeCurrentHealth(-DamageTaken);
 
+	//Trigger the blueprint event
 	PlayDamagedEffect(GetOwner()->GetActorLocation());
 
 	if (UnitStats->GetCurrentMana() < UnitStats->GetMaxMana())
@@ -203,6 +218,7 @@ void UAIBehaviour::Die()
 
 void UAIBehaviour::RemoveCurrentTargetFromList()
 {
+	//Loop through all opponent units and move the killed unit to the back of the list and reduce list count by one
 	for (int i = 0; i < OpponentUnits.Num(); i++)
 	{
 		if (OpponentUnits[i] == CurrentTarget)

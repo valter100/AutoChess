@@ -17,16 +17,17 @@ class AUTOCHESS2_API UAIBehaviour : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UAIBehaviour();
+
 	UUnitStats* UnitStats;
+	APlacementNode* CurrentNode;
+
 	AUnit* CurrentTarget;
+	TArray<AUnit*> OpponentUnits;
+
 	bool Dead;
 	bool Attacking;
 	bool Moving;
 	float TimeSinceLastAttack;
-	TArray<AUnit*> OpponentUnits;
-	APlacementNode* CurrentNode;
-
-	void DecideBehaviour();
 
 protected:
 	// Called when the game starts
@@ -37,6 +38,8 @@ protected:
 	virtual void UseAbility();
 	virtual void Die();
 	virtual void RemoveCurrentTargetFromList();
+
+	//Used as an event trigger in the Unit Blueprint
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDamagedEffect(FVector HitLocation);
 
@@ -51,4 +54,7 @@ public:
 	void SetOpponentUnits(TArray<AUnit*> Units);
 	void SetStats(UUnitStats* NewStats);
 	void SetCurrentNode(APlacementNode* NewNode);
+
+	//Replace behaviour in this function with your own
+	void DecideBehaviour();
 };

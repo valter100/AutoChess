@@ -13,10 +13,15 @@ class AUTOCHESS2_API APlacementNode : public AActor
 	GENERATED_BODY()
 	
 public:	
-	UPROPERTY(EditAnywhere) bool Occupied;
-	UPROPERTY(EditAnywhere) FVector NormalScale;
-	UPROPERTY(EditAnywhere) FVector HoveredScale;
-	//UPROPERTY(EditAnywhere) AUnitShop* Shop;
+	UPROPERTY(EditAnywhere) 
+	bool Occupied;
+
+	UPROPERTY(EditAnywhere) 
+	FVector NormalScale;
+
+	UPROPERTY(EditAnywhere) 
+	FVector HoveredScale;
+
 	// Sets default values for this actor's properties
 	APlacementNode();
 
@@ -31,5 +36,4 @@ public:
 	bool GetOccupied();
 	void HighlightNode();
 	void UnhighlightNode();
-	//void SellUnit(AUnit* SellUnit);
 };

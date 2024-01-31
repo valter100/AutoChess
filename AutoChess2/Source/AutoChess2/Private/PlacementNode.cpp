@@ -48,8 +48,3 @@ void APlacementNode::UnhighlightNode()
 	SetActorScale3D(NormalScale);
 }
 
-//void APlacementNode::SellUnit(AUnit* SellUnit)
-//{
-//	Shop->SellUnit(SellUnit);
-//}
-

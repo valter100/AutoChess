@@ -39,38 +39,6 @@ void AUnit::Tick(float DeltaTime)
 		return;
 	
 	AIBehaviour->DecideBehaviour();
-
-	/*TimeSinceLastAttack += DeltaTime;*/
-
-	/*if (!CurrentTarget)
-	{
-		IsAttacking = false;
-		IsMoving = false;
-		Target();
-	}
-
-	if (CurrentTarget != nullptr)
-	{
-		if (CurrentTarget->GetDead())
-		{
-			RemoveCurrentTargetFromList();
-			return;
-		}
-
-		Move();
-
-		if (FVector::Distance(GetActorLocation(), CurrentTarget->GetActorLocation()) < stats->GetAttackRange() && TimeSinceLastAttack > 1 / stats->GetAttacksPerSecond())
-		{
-			if (stats->GetCurrentMana() >= stats->GetMaxMana())
-			{
-				UseAbility();
-			}
-			else
-			{
-				Attack();
-			}
-		}
-	}*/
 }
 
 void AUnit::SetPickedUp(bool state)
@@ -163,116 +131,13 @@ void AUnit::Lift()
 		LastNode = CurrentNode;
 		CurrentNode->SetOccupied(false);
 		CurrentNode = nullptr;
-		//AIBehaviour->SetCurrentNode(nullptr);
 	}
 }
-
-//void AUnit::Move()
-//{
-//	if (!CurrentTarget)
-//	{
-//		return;
-//	}
-//
-//	FVector TargetLocation = CurrentTarget->GetActorLocation();
-//
-//	float Distance = FVector::Distance(GetActorLocation(), TargetLocation);
-//	//UE_LOG(LogTemp, Warning, TEXT("Distance: %f"), distance);
-//
-//	FVector Direction = TargetLocation - GetActorLocation();
-//	Direction.Normalize();
-//
-//	FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Direction);
-//	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
-//	SetActorRotation(NewRotation);
-//	// Move the actor towards the target
-//	if (Distance < stats->GetAttackRange())
-//	{
-//		IsMoving = false;
-//		return;
-//	}
-//
-//	FVector NewLocation = GetActorLocation() + (GetActorForwardVector() * stats->GetMovementSpeed());
-//	SetActorLocation(NewLocation);
-//	IsMoving = true;
-//}
-
-//void AUnit::Target()
-//{
-//	float ClosestDistance = FLT_MAX;
-//	AUnit* ClosestUnit = nullptr;
-//
-//	for (int i = 0; i < OpponentUnits.Num(); i++)
-//	{
-//		if (OpponentUnits[i] == nullptr)
-//			continue;
-//
-//		float distanceToUnit = FVector::Distance(GetActorLocation(), OpponentUnits[i]->GetActorLocation());
-//
-//		if (distanceToUnit < ClosestDistance)
-//		{
-//			ClosestDistance = distanceToUnit;
-//			ClosestUnit = OpponentUnits[i];
-//		}
-//	}
-//
-//	if (ClosestUnit)
-//	{
-//		CurrentTarget = ClosestUnit;
-//	}
-//}
-
-//void AUnit::Attack()
-//{
-//	CurrentTarget->TakeDamage(stats->GetDamage());
-//	TimeSinceLastAttack = 0;
-//	IsAttacking = true;
-//	stats->ChangeCurrentMana(stats->GetManaPerHit());
-//
-//	if (CurrentTarget->GetHealth() <= 0)
-//	{
-//		IsAttacking = false;
-//		RemoveCurrentTargetFromList();
-//	}
-//}
-
-//void AUnit::UseAbility()
-//{
-//	Addon::Print("Ability Used!");
-//	stats->SetCurrentMana(0);
-//	TimeSinceLastAttack = 0;
-//}
 
 void AUnit::ReceiveDamage(int DamageTaken)
 {
 	AIBehaviour->TakeDamage(DamageTaken);
-
-	//stats->ChangeCurrentHealth(-DamageTaken);
-
-	//PlayDamagedEffect(GetActorLocation());
-
-	//if(stats->GetCurrentMana() < stats->GetMaxMana())
-	//{
-	//	stats->ChangeCurrentMana(stats->GetManaWhenHit());
-	//}
-
-	//if (stats->GetCurrentHealth() <= 0)
-	//	Die();
 }
-
-//void AUnit::RemoveCurrentTargetFromList()
-//{
-//	for (int i = 0; i < OpponentUnits.Num(); i++)
-//	{
-//		if (OpponentUnits[i] == CurrentTarget)
-//		{
-//			CurrentTarget = nullptr;
-//			OpponentUnits[i] = OpponentUnits[OpponentUnits.Num() - 1];
-//			OpponentUnits.SetNum(OpponentUnits.Num() - 1);
-//			return;
-//		}
-//	}
-//}
 
 int AUnit::GetHealth()
 {

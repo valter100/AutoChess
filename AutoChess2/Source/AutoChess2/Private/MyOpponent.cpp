@@ -26,6 +26,7 @@ void AMyOpponent::Tick(float DeltaTime)
 
 }
 
+// Generates a random unit for each unit on the Player team
 void AMyOpponent::GenerateTeam()
 {
 	int PlayerUnitAmount = Player->GetUnitsOnBoard().Num();
@@ -39,6 +40,7 @@ void AMyOpponent::GenerateTeam()
 	SpawnUnits();
 }
 
+// Places the randomized units onto random nodes, prioritizing front line for Melee and Back line for Ranged units
 void AMyOpponent::SpawnUnits()
 {
 
@@ -48,11 +50,11 @@ void AMyOpponent::SpawnUnits()
 	}
 
 
-	for (AUnit* i : SpawnedUnits)
+	for (AUnit* unit : SpawnedUnits)
 	{
 		APlacementNode* Node = nullptr;
 
-		if (i->IsA<AMelee>())
+		if (unit->IsA<AMelee>())
 		{
 			Node = GetRandomUnnocupiedNode(FrontLine);
 
@@ -61,7 +63,7 @@ void AMyOpponent::SpawnUnits()
 				Node = GetRandomUnnocupiedNode(BackLine);
 			}
 		}
-		else if(i->IsA<ARanged>())
+		else if(unit->IsA<ARanged>())
 		{
 			Node = GetRandomUnnocupiedNode(BackLine);
 
@@ -75,9 +77,9 @@ void AMyOpponent::SpawnUnits()
 			return;
 
 		FVector spawnPosition = Node->GetActorLocation();
-		i->SetActorLocation(spawnPosition);
-		i->SetOnBoard(true);
-		i->SetCurrentNode(Node); //Change to depend on stat changes and rarity
+		unit->SetActorLocation(spawnPosition);
+		unit->SetOnBoard(true);
+		unit->SetCurrentNode(Node);
 	}
 }
 

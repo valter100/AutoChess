@@ -20,18 +20,21 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AUnit>> AllUnits;
+
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AUnit>> RandomizedTeam;
+
 	UPROPERTY(EditAnywhere)
 	TArray<AUnit*> SpawnedUnits;
+
 	UPROPERTY(EditAnywhere)
 	TArray<APlacementNode*> FrontLine;
+
 	UPROPERTY(EditAnywhere)
 	TArray<APlacementNode*> BackLine;
+
 	UPROPERTY(EditAnywhere)
 	AMyPlayer* Player;
-
-	//TArray<AUnit*> EnemyUnits;
 
 	// Sets default values for this actor's properties
 	AMyOpponent();
@@ -43,19 +46,27 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void GenerateTeam();
+
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void SpawnUnits();
+
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void CleanUpUnits();
-	APlacementNode* GetRandomUnnocupiedNode(TArray<APlacementNode*> NodeArray);
+
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void ActivateUnits();
+
 	UFUNCTION(BlueprintCallable, category = "Opponent")
 	void SetOpponentUnits(TArray<AUnit*> Units);
+
 	UFUNCTION(BlueprintPure, category = "Opponent")
 	TArray<AUnit*> GetSpawnedUnits();
+
 	UFUNCTION(BlueprintPure, category = "Player")
 	bool HasRemainingUnitsOnBoard();
+
+	APlacementNode* GetRandomUnnocupiedNode(TArray<APlacementNode*> NodeArray);
 };

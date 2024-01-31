@@ -15,8 +15,10 @@ class AUTOCHESS2_API ANodeManager : public AActor
 public:	
 	UPROPERTY(EditAnywhere)
 	TArray<APlacementNode*> PlacementNodes;
+
 	UPROPERTY(EditAnywhere)
 	TArray<APlacementNode*> SideLineNodes;
+
 	ANodeManager();
 
 protected:
@@ -26,8 +28,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	APlacementNode* GetFirstUnoccupiedNode();
+
 	UFUNCTION(BlueprintCallable, category = "Node Manager")
 	void TogglePlacementNodes();
 
+	APlacementNode* GetFirstUnoccupiedNode();
 };

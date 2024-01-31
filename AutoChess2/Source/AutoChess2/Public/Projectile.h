@@ -12,16 +12,18 @@ UCLASS()
 class AUTOCHESS2_API AProjectile : public AActor
 {
 	GENERATED_BODY()
+
 	UPROPERTY(EditAnywhere)
 	AUnit* Target;
-	float Damage;
 
 	UPROPERTY(EditAnywhere)
 	float LifeTime;
-	float TimeAlive;
 
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed;
+
+	float Damage;
+	float TimeAlive;
 	
 public:	
 	// Sets default values for this actor's properties

@@ -14,10 +14,11 @@ class AUTOCHESS2_API ARoundManager : public AActor
 	GENERATED_BODY()
 	
 public:	
-	AUnitShop* Shop;
-		float RoundTimer;
 	UPROPERTY(BlueprintReadOnly)
-		float TimeBetweenRounds;
+	float TimeBetweenRounds;
+
+	AUnitShop* Shop;
+	float RoundTimer;
 
 	// Sets default values for this actor's properties
 	ARoundManager();
@@ -29,15 +30,21 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void SetShop(AUnitShop* newShop);
+
 	UFUNCTION(BlueprintPure, Category = "Round Manager")
 	float GetRoundTimer();
+
 	UFUNCTION(BlueprintPure, Category = "Round Manager")
 	float GetTimeLeft();
+
 	UFUNCTION(BlueprintCallable, Category = "Round Manager")
 	void SetRoundTimer(float value);
+
 	UFUNCTION(BlueprintPure, Category = "Round Manager")
 	float GetTimeBetweenRounds();
+
 	UFUNCTION(BlueprintCallable, Category = "Round Manager")
 	void SetTimeBetweenRounds(float NewValue);
+
+	void SetShop(AUnitShop* newShop);
 };

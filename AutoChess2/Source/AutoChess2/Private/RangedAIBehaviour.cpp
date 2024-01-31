@@ -2,11 +2,11 @@
 
 
 #include "RangedAIBehaviour.h"
+#include "Addon.h"
 
+// Overloaded function of the AIBehaviour's attack function
 void URangedAIBehaviour::Attack()
 {
-	Addon::Print("RANGED ATTACK");
-
 	TimeSinceLastAttack = 0;
 	UnitStats->ChangeCurrentMana(UnitStats->GetManaPerHit());
 	Attacking = true;
